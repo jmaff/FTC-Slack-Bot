@@ -1,3 +1,56 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           ______     ______     ______   __  __     __     ______
+          /\  == \   /\  __ \   /\__  _\ /\ \/ /    /\ \   /\__  _\
+          \ \  __<   \ \ \/\ \  \/_/\ \/ \ \  _"-.  \ \ \  \/_/\ \/
+           \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \_\    \ \_\
+            \/_____/   \/_____/     \/_/   \/_/\/_/   \/_/     \/_/
+
+
+This is a sample Slack bot built with Botkit.
+
+This bot demonstrates many of the core features of Botkit:
+
+* Connect to Slack using the real time API
+* Receive messages based on "spoken" patterns
+* Reply to messages
+* Use the conversation system to ask questions
+* Use the built in storage system to store and retrieve information
+  for a user.
+
+# RUN THE BOT:
+
+  Create a new app via the Slack Developer site:
+
+    -> http://api.slack.com
+
+  Get a Botkit Studio token from Botkit.ai:
+
+    -> https://studio.botkit.ai/
+
+  Run your bot from the command line:
+
+    clientId=<MY SLACK TOKEN> clientSecret=<my client secret> PORT=<3000> studio_token=<MY BOTKIT STUDIO TOKEN> node bot.js
+
+# USE THE BOT:
+
+    Navigate to the built-in login page:
+
+    https://<myhost.com>/login
+
+    This will authenticate you with Slack.
+
+    If successful, your bot will come online and greet you.
+
+
+# EXTEND THE BOT:
+
+  Botkit has many features for building cool and useful bots!
+
+  Read all about it here:
+
+    -> http://howdy.ai/botkit
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var env = require('node-env-file');
 env(__dirname + '/.env');
 
@@ -62,14 +115,10 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 });
 
 var rules = require(__dirname + '/plugins/rules.js');
+var atts = require(__dirname + '/plugins/attatchments.js')
+var warnings = {}
+var version = "Alpha v0.1.1";
 
-
-// This captures and evaluates any message sent to the bot as a DM
-// or sent to the bot in the form "@bot message" and passes it to
-// Botkit Studio to evaluate for trigger words and patterns.
-// If a trigger is matched, the conversation will automatically fire!
-// You can tie into the execution of the script using the functions
-// controller.studio.before, controller.studio.after and controller.studio.validate
 if (process.env.studio_token) {
     //controller.on('direct_message,direct_mention,mention', function(bot, message) {
         //controller.studio.runTrigger(bot, message.text, message.user, message.channel).then(function(convo) {
@@ -118,19 +167,23 @@ if (process.env.studio_token) {
       var rule = message.text.toUpperCase();
       
       if (rules.rulebook[rule] != undefined) {
-        slashCommand.replyPublic(message, '*' + htmlEscape('<') + rule + htmlEscape('>') + '* ' + rules.rulebook[rule]);
+        var final = '*' + htmlEscape('<') + rule + htmlEscape('>') + '* ' + rules.rulebook[rule];
+        slashCommand.replyPublic(message, atts.ruleFormat(final, version));
+        break;
       }
       
       else {
-        slashCommand.replyPublic(message, "Oops. I couldn't find that rule.")
+        slashCommand.replyPublic(message, "Oops. I couldn't find that rule.");
+        break;
       }   
       
-      break;
+      
       
     case "/rulesearch":
       var result = searchFor(message.text);
-      slashCommand.replyPublic(message, result);
+      slashCommand.replyPublic(message, atts.searchFormat(message.text, result, version));
       break;
+      
       
       
         default:
@@ -200,13 +253,13 @@ function htmlEscape(str) {
 function searchFor(term) {
   var results = [];
   for (var key in rules.rulebook) {
-    var currentRule = rules.rulebook[key];
+    var currentRule = rules.rulebook[key].toLowerCase();
     
     
     var lt = htmlEscape('<');
     var gt = htmlEscape('>');
     
-    if (currentRule.includes(term)) {
+    if (currentRule.includes(term.toLowerCase())) {
       results.push(key);
     }
     
@@ -214,7 +267,7 @@ function searchFor(term) {
   
   var answer = "";
   for (var i = 0; i < results.length; i++) {
-    answer = answer.concat('*' + htmlEscape('<') + results[i] + htmlEscape('>') + '* ');
+    answer = answer.concat(htmlEscape('<') + results[i] + htmlEscape('>'));
   }
   
   if (answer != "") {
