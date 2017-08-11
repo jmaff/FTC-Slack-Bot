@@ -115,9 +115,23 @@ if (process.env.studio_token) {
       break;
       
     case "/rule":
-      var rule = message.text;
-      slashCommand.replyPublic(message, rules.rulebook[rule]);
+      var rule = message.text.toUpperCase();
+      
+      if (rules.rulebook[rule] != undefined) {
+        slashCommand.replyPublic(message, '*' + htmlEscape('<') + rule + htmlEscape('>') + '* ' + rules.rulebook[rule]);
+      }
+      
+      else {
+        slashCommand.replyPublic(message, "Oops. I couldn't find that rule.")
+      }   
+      
       break;
+      
+    case "/rulesearch":
+      var result = searchFor(message.text);
+      slashCommand.replyPublic(message, result);
+      break;
+      
       
         default:
             slashCommand.replyPublic(message, "I'm afraid I don't know how to " + message.command + " yet.");
@@ -172,4 +186,42 @@ function formatUptime(uptime) {
   
   uptime = uptime + ' ' + unit;
   return uptime;
+}
+
+function htmlEscape(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function searchFor(term) {
+  var results = [];
+  for (var key in rules.rulebook) {
+    var currentRule = rules.rulebook[key];
+    
+    
+    var lt = htmlEscape('<');
+    var gt = htmlEscape('>');
+    
+    if (currentRule.includes(term)) {
+      results.push(key);
+    }
+    
+  }
+  
+  var answer = "";
+  for (var i = 0; i < results.length; i++) {
+    answer = answer.concat('*' + htmlEscape('<') + results[i] + htmlEscape('>') + '* ');
+  }
+  
+  if (answer != "") {
+    return answer
+  }
+  
+  else {
+    return "Oops! Your search did not return any results."
+  }
 }
