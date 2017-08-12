@@ -64,11 +64,38 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 var rules = require(__dirname + '/plugins/rules.js');
 var atts = require(__dirname + '/plugins/attatchments.js')
 var warnings = {}
-var version = "Alpha v0.1.1";
+var version = "Alpha v0.1.3";
 
 if (process.env.studio_token) {
     //controller.on('direct_message,direct_mention,mention', function(bot, message) {
         //controller.studio.runTrigger(bot, message.text, message.user, message.channel).then(function(convo) {
+  controller.on('bot_channel_join',function(bot, message) {
+    bot.say({
+      text:"Well, howdy! I'm FTC Bot, here to help you with all \
+of your FIRST Tech Challenge Needs. Type !help to learn all about what I can do!",
+      
+      channel:message.channel
+    })
+                
+                })
+  
+  controller.hears(['!help'], 'ambient', function(bot,message) {
+    
+    bot.say({
+      text:":mailbox: Check your IMs!",
+      channel:message.channel
+    })
+  // start a conversation to handle this response.
+  bot.startPrivateConversation(message,function(err,convo) {
+    
+    convo.say(atts.help(version));
+
+  
+
+  });
+
+});
+  
   controller.on('slash_command',function(slashCommand,message) {
 
   switch(message.command) {
@@ -130,6 +157,23 @@ if (process.env.studio_token) {
       var result = searchFor(message.text);
       slashCommand.replyPublic(message, atts.searchFormat(message.text, result, version));
       break;
+      
+    case "/coinflip":
+      var result = Math.random();
+      if (result < 0.5) {
+        slashCommand.replyPublic(message, "Heads!");
+      }
+      
+      else {
+        slashCommand.replyPublic(message, "Tails!");
+      }
+    
+      break;
+      
+    case "/info":
+      controller.startPrivateConversation(message, "HI");
+      
+                        
       
       
       
