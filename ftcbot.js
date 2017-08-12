@@ -62,13 +62,15 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 });
 
 var rules = require(__dirname + '/plugins/rules.js');
-var atts = require(__dirname + '/plugins/attatchments.js')
-var warnings = {}
-var version = "Alpha v0.1.3";
+var atts = require(__dirname + '/plugins/attatchments.js');
+var inter = require(__dirname + '/plugins/interactive.js');
+var warnings = {};
+var version = "Alpha v0.2.3";
 
 if (process.env.studio_token) {
     //controller.on('direct_message,direct_mention,mention', function(bot, message) {
         //controller.studio.runTrigger(bot, message.text, message.user, message.channel).then(function(convo) {
+  
   controller.on('bot_channel_join',function(bot, message) {
     bot.say({
       text:"Well, howdy! I'm FTC Bot, here to help you with all \
@@ -96,6 +98,21 @@ of your FIRST Tech Challenge Needs. Type !help to learn all about what I can do!
 
 });
   
+  controller.hears(['!feedback'], 'ambient', function(bot,message) {
+    
+    bot.say({
+    "attachments" : atts.feedback(version),
+      "channel":message.channel
+  
+    });
+
+});
+  
+          
+          
+      
+    
+    
   controller.on('slash_command',function(slashCommand,message) {
 
   switch(message.command) {
@@ -170,8 +187,68 @@ of your FIRST Tech Challenge Needs. Type !help to learn all about what I can do!
     
       break;
       
-    case "/info":
-      controller.startPrivateConversation(message, "HI");
+    case "/parts":
+      var userInput = message.text.split(" ");
+      var vendor = userInput[0].toLowerCase();
+      var query = "";
+      var url = ""
+      
+      
+      
+      switch(vendor) {
+        case 'help':
+          slashCommand.replyPublic(message, "Use /parts [vendor] [part name] to find \
+a specific robotics part. For a list of vendors type /parts vendors");
+          break;
+        
+        case 'vendors':
+          slashCommand.replyPublic(message, atts.vendors(version));
+          break;
+          
+        case 'tetrix':
+          var query = assembleQuery(userInput, '_');
+          url = "https://www.tetrixrobotics.com/Search/" + query
+          slashCommand.replyPublic(message, url);
+          break;
+          
+        case 'modernrobotics':
+        case 'mr':
+          var query = assembleQuery(userInput, '%20');
+          url = "http://www.modernroboticsinc.com/search?as=true&cid=0&q=" + query + "&Sid=True&Isc=true";
+          slashCommand.replyPublic(message, url);
+          break;
+          
+        case 'rev':
+        case 'revrobotics':
+          var query = assembleQuery(userInput, '+');
+          url = "http://www.revrobotics.com/search.php?search_query=" + query;
+          slashCommand.replyPublic(message, url);
+          break;
+          
+        case 'andymark':
+        case 'am':
+          var query = assembleQuery(userInput, '+');
+          url = "http://www.andymark.com/Search-s/545.htm?Search=" + query + "&Submit=";
+          slashCommand.replyPublic(message, url);
+          break;
+          
+        case 'actobotics':
+          var query = assembleQuery(userInput, '+');
+          url = "http://www.revrobotics.com/search.php?search_query=" + query;
+          slashCommand.replyPublic(message, url);
+          break;
+          
+        default:
+          userInput.splice(0, 0, "nothingtoseehere");
+          var query = assembleQuery(userInput, '+');
+          url = "https://www.google.com/search?q=" + query;
+          slashCommand.replyPublic(message, url + "\n if you would like results from \
+a specific vendor's site, please use the vendor before the query");
+          
+                   }
+      break;
+      
+
       
                         
       
@@ -268,4 +345,19 @@ function searchFor(term) {
   else {
     return "Oops! Your search did not return any results."
   }
+}
+
+function assembleQuery(userInput, symbol) {
+  var query = "";
+  for(var i = 1; i < userInput.length; i++) {
+        if (i != userInput.length - 1) {
+          query = query + userInput[i] + symbol;
+        }
+    
+        else {
+          query = query + userInput[i];
+        }
+      }
+  
+  return query;
 }
