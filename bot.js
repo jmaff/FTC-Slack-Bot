@@ -67,10 +67,69 @@ var inter = require(__dirname + '/plugins/interactive.js');
 var warnings = {};
 var version = "Alpha v0.2.3";
 
+var fs = require('fs')
+var restart = false;
+
+
+function changeStatus(newValue) {
+  var filename = __dirname + "/status.txt";
+
+  fs.writeFileSync(filename, newValue, 'utf8');
+
+}
+
+function getStatus() {
+  return fs.readFileSync(__dirname + "/status.txt",'utf8').toString();
+}
+
+function restart() {
+  process.exit(1);
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+
+var status = getStatus();
+console.log(status);
+
 if (process.env.studio_token) {
+
+  if (status === "offline") {
+    controller.hears(['!restart'], 'ambient', function(bot,message) {
+  
+  if (message.user === "U6N96HT1V" || message.user === "U6TF5AS90") {
+    
+    bot.say({
+    "text" : "I'm back!",
+    "channel":message.channel
+  
+    });
+    
+  changeStatus("online");
+  setTimeout(function() {
+    process.exit(1);
+  }, 4000);
+  
+    
+  }
+    
+  
+      
+  }); 
+    
+  }
+  
+
+  else {
     //controller.on('direct_message,direct_mention,mention', function(bot, message) {
         //controller.studio.runTrigger(bot, message.text, message.user, message.channel).then(function(convo) {
-  
   controller.on('bot_channel_join',function(bot, message) {
     bot.say({
       text:"Well, howdy! I'm FTC Bot, here to help you with all \
@@ -108,12 +167,40 @@ of your FIRST Tech Challenge Needs. Type !help to learn all about what I can do!
 
 });
   
-          
-          
-      
+  
+controller.hears(['!shutdown'], 'ambient', function(bot,message) {
+  
+  if (message.user === "U6N96HT1V" || message.user === "U6TF5AS90") {
     
+    bot.say({
+    "text" : "Bot is currently down for maintenance. See you soon everyone!",
+    "channel":message.channel
+  
+    });
     
+  changeStatus("offline");
+  setTimeout(function() {
+    process.exit(1);
+  }, 4000);
+   
+  } 
+  
+  else {
+    bot.say({
+    "text" : "Oops! You don't have permission to use this command.",
+    "channel":message.channel
+  
+    });
+    
+  }
+  
+    
+
+});
+    
+  
   controller.on('slash_command',function(slashCommand,message) {
+    
 
   switch(message.command) {
     case "/echo":
@@ -260,22 +347,25 @@ a specific vendor's site, please use the vendor before the query");
     
   }
   
-
-});  
-          
-          
-          
-        //}).catch(function(err) {
+  
+});    
+  } 
+  
+  
+  
+//}).catch(function(err) {
             //bot.reply(message, 'I experienced an error with a request to Botkit Studio: ' + err);
             //debug('Botkit Studio: ', err);
       
-  
-} else {
+} 
+
+
+
+else {
     console.log('~~~~~~~~~~');
     console.log('NOTE: Botkit Studio functionality has not been enabled');
     console.log('To enable, pass in a studio_token parameter with a token from https://studio.botkit.ai/');
 }
-
 
 
 
