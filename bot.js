@@ -62,7 +62,7 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 });
 
 var rules = require(__dirname + '/plugins/rules.js');
-var atts = require(__dirname + '/plugins/attatchments.js');
+var atts = require(__dirname + '/plugins/attachments.js');
 var inter = require(__dirname + '/plugins/interactive.js');
 var warnings = {};
 var version = "Alpha v0.2.3";
