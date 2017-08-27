@@ -15,6 +15,7 @@ var ruleFormat = function(rule, version) {
   };
 }
 
+
 var searchFormat = function(query, results, version) {
   return {
     "attachments": [
@@ -31,6 +32,7 @@ var searchFormat = function(query, results, version) {
   };
 }
 
+
 var help = function(version) {
   return {
     "attachments": [
@@ -42,6 +44,12 @@ var help = function(version) {
             "fields": [
               {
                     "title": "-------------- Bot Information Commands (!) --------------",
+                    "short": false
+                },
+              
+              {
+                    "title": "!about",
+                    "value": "Returns information about FTC Bot",
                     "short": false
                 },
               
@@ -224,7 +232,37 @@ var image = function(gifURL){
 
   };
 }
-    
+
+var about = function(version) {
+  return [
+        {
+            "fallback": "About FTC Bot",
+            "color": "#FFA500",
+          "title": "About FTC Bot " + version,
+            "text": "Presented to you by FTC Team 8711: The Gas Attendants, FTC Bot is an open-sourced project aimed to be a tool for FIRST Tech Challenge teams use in the Slack communication service. This is NOT an official application from FIRST or FIRST Tech Challenge itself, just a tool we wanted to share with other teams. We really hope you enjoy using FTC Bot, and be sure to let us know your thoughts using !feedback. Thanks everyone!",
+          "footer" : "FTC Bot " + version,
+          "mrkdwn_in" : ["text"],
+          "thumb_url": "https://cdn.glitch.com/049d271f-9462-4d10-a9a0-4f09d7574033%2Flargelogo.jpg?1503861353357",
+          "fields": [
+
+              {
+                    "title": "GitHub Repository",
+                    "value": "https://github.com/jmaff/FTC-Slack-Bot",
+                    "short": false
+                },
+            
+            {
+                    "title": "Team 8711 Website",
+                    "value": "http://thegasattendantsftc.weebly.com/",
+                    "short": false
+                },
+            ]
+        }
+    ];
+}
+
+  
+
   
 exports.ruleFormat = ruleFormat;
 exports.searchFormat = searchFormat;
@@ -232,6 +270,7 @@ exports.help = help;
 exports.feedback = feedback;
 exports.vendors = vendors;
 exports.image = image;
+exports.about = about;
 exports.basicAttatch = {
     "attachments": [
         {
