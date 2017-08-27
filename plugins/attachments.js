@@ -1,4 +1,4 @@
-//Contains all "attatched" message objects to avoid clutter in bot.js
+//Contains all "attached" message objects to avoid clutter in bot.js
 
 var ruleFormat = function(rule, version) {
   return {
@@ -76,6 +76,12 @@ var help = function(version) {
                 },
               
               {
+                    "title": "/forums",
+                    "value": "Searches the FTC forums for a query",
+                    "short": false
+                },
+              
+              {
                     "title": "/ftcroot",
                     "value": "Returns a ftcroot link for the given team number",
                     "short": false
@@ -91,6 +97,18 @@ before the query to search on that vendor's site instead of google",
                 {
                     "title": "/ping",
                     "value": "Returns pong!",
+                    "short": false
+                },
+              
+              {
+                    "title": "/resourcelibrary",
+                    "value": "Searches the FIRST Resource Library for a query",
+                    "short": false
+                },
+              
+              {
+                    "title": "/robot",
+                    "value": "Returns a random robot GIF",
                     "short": false
                 },
               
@@ -193,18 +211,27 @@ var vendors = function(version) {
   };
 }
 
+var image = function(gifURL){
+  return {
+    "attachments": [
+        {
+            "fallback": "Random Robot GIF",
+            "color": "#FFA500",
+            
+            "image_url": gifURL
+        }
+    ]
 
+  };
+}
     
-  
-  
-
-
   
 exports.ruleFormat = ruleFormat;
 exports.searchFormat = searchFormat;
 exports.help = help;
 exports.feedback = feedback;
 exports.vendors = vendors;
+exports.image = image;
 exports.basicAttatch = {
     "attachments": [
         {
