@@ -65,7 +65,8 @@ var rules = require(__dirname + '/plugins/rules.js');
 var atts = require(__dirname + '/plugins/attachments.js');
 var inter = require(__dirname + '/plugins/interactive.js');
 var warnings = {};
-var version = "Alpha v0.2.3";
+var gifs = require(__dirname + '/plugins/gifdir.js');
+var version = "Alpha v0.3.1";
 
 var fs = require('fs')
 var restart = false;
@@ -143,7 +144,7 @@ of your FIRST Tech Challenge Needs. Type !help to learn all about what I can do!
   controller.hears(['!help'], 'ambient', function(bot,message) {
     
     bot.say({
-      text:":mailbox: Check your IMs!",
+      text:":mailbox: Check your DMs!",
       channel:message.channel
     })
   // start a conversation to handle this response.
@@ -335,10 +336,48 @@ a specific vendor's site, please use the vendor before the query");
                    }
       break;
       
+    case "/forums":
+      var userInput = message.text.split(" ");
+      
+      if (userInput.length === 1) {
+        userInput.splice(0, 0, "nothingtoseehere");
+      }
+      
+      var url = "https://ftcforum.usfirst.org/search?q=";
+      var query = assembleQuery(userInput, '+');
+      slashCommand.replyPublic(message, url + query);
+      
+      break;
+      
+      case "/resourcelibrary":
+      var userInput = message.text.split(" ");
+      
+      if (userInput.length === 1) {
+        userInput.splice(0, 0, "nothingtoseehere");
+      }
+      var query = assembleQuery(userInput, '+');
+      var url = "https://www.firstinspires.org/resource-library?flagged=All&combine=" + query + "&field_resource_library_tags_tid=All&field_resource_library_tags_tid=All&sort_by=created_1";
+      slashCommand.replyPublic(message, url + query);
+      
+      break;
+      
+    case "/robot":
+      var gifAddr = getRandomInt(0, 2);
+      var gifURL = "what";
+      var request = require('request');
+	
+	request('http://api.giphy.com/v1/gifs/random?api_key=35dd7233b0fc40da80610be2cbdaf41a&tag=robot&limit=1', function (error, response, body) {
+  console.log('error:', error); // Print the error if one occurred 
+  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+  
+  gifURL = JSON.parse(body).data.image_url;
+  console.log(gifURL);
+  slashCommand.replyPublic(message, atts.image(gifURL));
+});
+      break;
 
-      
-                        
-      
+
+
       
       
         default:
@@ -368,6 +407,9 @@ else {
 }
 
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function usage_tip() {
     console.log('~~~~~~~~~~');
