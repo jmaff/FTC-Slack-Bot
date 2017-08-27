@@ -11,30 +11,80 @@ Our goal with Botkit is to make bot building easy, fun, and accessible to anyone
 If you are looking to create a bot on other platforms using Glitch, check out the [Botkit project page](https://glitch.com/botkit).
 
 ### Getting Started
- 
- There are a myriad of methods you can use to set up an application on Slack, but we feel this is the most flexible path you can use to setup your bot on the Slack Events API.
- 
+
+There are a myriad of methods you can use to set up an application on Slack, here are some of your options:
+
 #### Use Botkit Studio
- [Botkit Studio](https://studio.botkit.ai/signup?code=slackglitch) is a set of tools that adds capabilities to the open source Botkit library by offering hosted GUI interfaces for script management and action trigger definition. 
- 
- While Botkit Studio is *not required* to build a bot using Botkit, we highly recommend it as your bot will be easier to manage, customize and extend.
- 
+[Botkit Studio](https://studio.botkit.ai/signup?code=slackglitch) is a set of tools that adds capabilities to the open source Botkit library by offering hosted GUI interfaces for script management and action trigger definition. 
+
+While Botkit Studio is *not required* to build a bot using Botkit, we highly recommend it as your bot will be easier to manage, customize and extend.
+
+#### Install Botkit
+
+[Remix this project on Glitch](https://glitch.com/edit/#!/import/github/howdyai/botkit-starter-slack)
+
+[Deploy to Heroku](https://heroku.com/deploy?template=https://github.com/howdyai/botkit-starter-slack/master)
+
+Clone this repository using Git:
+
+`git clone https://github.com/howdyai/botkit-starter-slack.git`
+
+Install dependencies, including [Botkit](https://github.com/howdyai/botkit):
+
+```
+cd botkit-starter-slack
+npm install
+```
+
 #### Set up your Slack Application 
- 
- Once you have remixed this project, the next thing you will want to do is set up a new Slack application via the [Slack developer portal](https://api.slack.com/). This is a multi-step process, but only takes a few minutes. 
- 
- * [Read this step-by-step guide](https://github.com/howdyai/botkit/blob/master/docs/slack-events-api.md) to make sure everything is set up. 
- * We also have this [handy video walkthrough](https://youtu.be/us2zdf0vRz0) for setting up this project with Glitch.
- 
+Once you have setup your Botkit development enviroment, the next thing you will want to do is set up a new Slack application via the [Slack developer portal](https://api.slack.com/). This is a multi-step process, but only takes a few minutes. 
+
+* [Read this step-by-step guide](https://github.com/howdyai/botkit/blob/master/docs/slack-events-api.md) to make sure everything is set up. 
+
+* We also have this [handy video walkthrough](https://youtu.be/us2zdf0vRz0) for setting up this project with Glitch.
+
 Next, get a Botkit Studio token [from your Botkit developer account](https://studio.botkit.ai/) if you have decided to use Studio. 
- 
- Update the `.env` file in the Glitch project with your newly acquired tokens. If you have created this project from Studio, all your tokens have been entered in your `.env` already for you!
- 
- Once all your tokens have been entered, your `Show Live` button should become green. Click this button and you will see an option to add this bot to your team.
- 
- Once successfully logged in, your bot will connect to Slack AND Botkit Studio and leap into action! 
- 
- Now comes the fun part of [making your bot!](https://github.com/howdyai/botkit/blob/master/docs/readme.md#basic-usage)
+
+Update the `.env` file with your newly acquired tokens.
+
+Launch your bot application by typing:
+
+`node .`
+
+Now, visit your new bot's login page: http://localhost:3000/login
+
+Now comes the fun part of [making your bot!](https://github.com/howdyai/botkit/blob/master/docs/readme.md#basic-usage)
+
+
+### Extend This Starter kit
+
+This starter kit is designed to provide developers a robust starting point for building a custom bot. Included in the code are a set of sample bot "skills" that illustrate various aspects of the Botkit SDK features.  Once you are familiar with how Botkit works, you may safely delete all of the files in the `skills/` subfolder.
+
+Developers will build custom features as modules that live in the `skills/` folder. The main bot application will automatically include any files placed there.
+
+A skill module should be in the format:
+
+```
+module.exports = function(controller) {
+
+    // add event handlers to controller
+    // such as hears handlers that match triggers defined in code
+    // or controller.studio.before, validate, and after which tie into triggers
+    // defined in the Botkit Studio UI.
+
+}
+```
+
+Continue your journey to becoming a champion botmaster by [reading the Botkit Studio SDK documentation here.](https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md)
+
+
+### Customize Storage
+
+By default, the starter kit uses a simple file-system based storage mechanism to record information about the teams and users that interact with the bot. While this is fine for development, or use by a single team, most developers will want to customize the code to use a real database system.
+
+There are [Botkit plugins for all the major database systems](https://github.com/howdyai/botkit/blob/master/docs/readme-middlewares.md#storage-modules) which can be enabled with just a few lines of code.
+
+We have enabled our [Mongo middleware]() for starters in this project. To use your own Mongo database, just fill out `MONGO_URI` in your `.env` file with the appropriate information. For tips on reading and writing to storage, [check out these medium posts](https://botkit.groovehq.com/knowledge_base/categories/build-a-bot)
 
 # Developer & Support Community
 

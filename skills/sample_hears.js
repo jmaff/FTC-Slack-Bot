@@ -7,6 +7,7 @@ This module demonstrates simple uses of Botkit's `hears` handler functions.
 In these examples, Botkit is configured to listen for certain phrases, and then
 respond immediately with a single line response.
 
+(glitch sample code)
 */
 
 var wordfilter = require('wordfilter');

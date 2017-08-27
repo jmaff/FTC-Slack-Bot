@@ -16,6 +16,7 @@
         botkit-storage-dynamodb
         botkit-storage-mysql
 
+(glitch sample code)
 */
 
 module.exports = function(controller) {

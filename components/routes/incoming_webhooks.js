@@ -1,3 +1,4 @@
+//incoming webhook handler
 var debug = require('debug')('botkit:incoming_webhooks');
 
 module.exports = function(webserver, controller) {

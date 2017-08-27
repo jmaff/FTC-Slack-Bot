@@ -1,3 +1,4 @@
+//some sample code for something
 module.exports = function(controller) {
 
     // controller.middleware.receive.use(function(bot, message, next) {
