@@ -1,5 +1,5 @@
 //sorry I'm bad at organizing data so i crammed the whole rulebook into a single file
-
+//updated: 8/15/17
 exports.rulebook = {
   //Tournament Rules
   'T1' : "Egregious behavior by any Team, Team member, or other representative of the Team is not tolerated at a \

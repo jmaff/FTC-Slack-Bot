@@ -65,7 +65,6 @@ var rules = require(__dirname + '/plugins/rules.js');
 var atts = require(__dirname + '/plugins/attachments.js');
 var inter = require(__dirname + '/plugins/interactive.js');
 var warnings = {};
-var gifs = require(__dirname + '/plugins/gifdir.js');
 var version = "Alpha v0.3.1";
 
 var fs = require('fs')
@@ -467,7 +466,7 @@ function searchFor(term) {
   
   var answer = "";
   for (var i = 0; i < results.length; i++) {
-    answer = answer.concat(htmlEscape('<') + results[i] + htmlEscape('>'));
+    answer = answer.concat(htmlEscape('<') + results[i] + htmlEscape('> '));
   }
   
   if (answer != "") {

@@ -1,3 +1,4 @@
+//dashbot plugin (not used)
 module.exports = function(controller) {
 
     // Dashbot is a turnkey analytics platform for bots.

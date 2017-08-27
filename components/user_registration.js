@@ -1,3 +1,4 @@
+//user registration
 var debug = require('debug')('botkit:user_registration');
 
 module.exports = function(controller) {

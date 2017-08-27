@@ -1,3 +1,4 @@
+//main json file containing app information
 {
   "name": "Botkit Starter Kit",
   "description": "A starting point for building custom Slack applications",

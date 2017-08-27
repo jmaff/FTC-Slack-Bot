@@ -1,4 +1,4 @@
-//Contains all "attached" message objects to avoid clutter in bot.js
+//Contains all "attached" message objects to avoid clutter in bot.js exported as functions to vary information
 
 var ruleFormat = function(rule, version) {
   return {

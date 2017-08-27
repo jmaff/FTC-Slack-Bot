@@ -7,6 +7,7 @@ This module demonstrates simple uses of Botkit's conversation system.
 In this example, Botkit hears a keyword, then asks a question. Different paths
 through the conversation are chosen based on the user's response.
 
+(example code from glitch)
 */
 
 module.exports = function(controller) {

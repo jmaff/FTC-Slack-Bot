@@ -1,3 +1,4 @@
+//onboarding
 var debug = require('debug')('botkit:onboarding');
 
 module.exports = function(controller) {

@@ -1,3 +1,4 @@
+//real time messaging manager
 var debug = require('debug')('botkit:rtm_manager');
 
 module.exports = function(controller) {

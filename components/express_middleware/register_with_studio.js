@@ -1,3 +1,4 @@
+//register with studio
 var request = require('request');
 var debug = require('debug')('botkit:register_with_studio');
 module.exports = function(webserver, controller) {
