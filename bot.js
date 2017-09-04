@@ -54,6 +54,7 @@ require(__dirname + '/components/onboarding.js')(controller);
 // Enable Dashbot.io plugin
 require(__dirname + '/components/plugin_dashbot.js')(controller);
 
+
 require(__dirname + '/plugins/awake.js');
 
 var version = "Beta v1.0";
