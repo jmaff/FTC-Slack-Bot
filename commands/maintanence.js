@@ -26,17 +26,19 @@ console.log(status);
 if (process.env.studio_token) {
 
   if (status === "offline") {
-    controller.hears(['!restart'], 'ambient', function(bot,message) {
+    
+  controller.hears(['!restart'], 'ambient', function(bot,message) {
   
   if (message.user === "U6N96HT1V" || message.user === "U6TF5AS90") {
     
     bot.say({
-    "text" : "I'm back!",
-    "channel":message.channel
+      "text" : "I'm back!",
+      "channel":message.channel
   
-    });
+      });
     
   changeStatus("online");
+  
   setTimeout(function() {
     process.exit(1);
   }, 4000);
@@ -44,6 +46,8 @@ if (process.env.studio_token) {
     
   }
 }); 
+    
+  
     
   }
   
@@ -57,6 +61,8 @@ if (process.env.studio_token) {
     "channel":message.channel
   
     });
+    
+  
     
   changeStatus("offline");
   setTimeout(function() {

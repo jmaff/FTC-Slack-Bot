@@ -58,7 +58,7 @@ exports.searchFor = function searchFor(term, rules) {
   
   var answer = "";
   for (var i = 0; i < results.length; i++) {
-    answer = answer.concat(htmlEscapeNative('<') + results[i] + htmlEscapeNative('> '));
+    answer = answer.concat(/*(htmlEscapeNative('<')*/results[i] +  " "/*htmlEscapeNative('> ')*/);
   }
   
   if (answer != "") {

@@ -1,52 +1,33 @@
-//atempt at creating interactive messages
-exports.interactiveHandle = interactiveHandle;
+exports.interactiveSearch = function (results, query) {
+  var buttons = [];
+  for (var i = 0; i < results.length; i++) {
+    buttons.push({});
+  }
   
-
-var interactiveHandle = function(controller) {
-
-    // create special handlers for certain actions in buttons
-    // if the button action is 'action', trigger an event
-    // if the button action is 'say', act as if user said that thing
-    controller.on('interactive_message_callback', function(bot, trigger) {
-
-
-        if (trigger.actions[0].name.match(/^action$/)) {
-            controller.trigger(trigger.actions[0].value, [bot, trigger]);
-            return false; // do not bubble event
-        }
-        if (trigger.actions[0].name.match(/^say$/)) {
-
-            var message = {
-                user: trigger.user,
-                channel: trigger.channel,
-                text: '<@' + bot.identity.id + '> ' + trigger.actions[0].value,
-                type: 'message',
-            };
-
-            var reply = trigger.original_message;
-
-            for (var a = 0; a < reply.attachments.length; a++) {
-                reply.attachments[a].actions = null;
+  console.log(buttons);
+  console.log(results);
+  
+  
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i]["name"] = results[i];
+    buttons[i]["text"] = results[i];
+    buttons[i]["value"] = results[i];
+    buttons[i]["type"] = "button";
+  }
+  
+  buttons.splice(buttons.length, 1);
+  console.log(buttons);
+  return {
+        attachments:[
+            {
+                title: 'Search results for ' + query + '...',
+                color: '#FFA500',
+                callback_id: '123',
+                attachment_type: 'default',
+                actions: buttons
             }
-
-            var person = '<@' + trigger.user.id + '>';
-            if (message.channel[0] == 'D') {
-                person = 'You';
-            }
-
-            reply.attachments.push(
-                {
-                    text: person + ' said, ' + trigger.actions[0].value,
-                }
-            );
-
-            bot.replyInteractive(trigger, reply);
-
-            controller.receiveMessage(bot, message);
-            return false; // do not bubble event
-        }
-
-    });
+        ]
+  }
+    };
 
 
-}
