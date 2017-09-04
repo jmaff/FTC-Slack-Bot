@@ -18,6 +18,8 @@ module.exports = function(controller, version, atts) {
   var keysPath = path.join(__dirname, '..', 'plugins', 'keys.js');
   var keys = require(keysPath);
     
+  var inter = require(__dirname + '/../plugins/interactive.js');
+    
   var status = path.join(__dirname, 'maintanence.js')
     
   if (getStatus() === "online") {
@@ -77,7 +79,16 @@ module.exports = function(controller, version, atts) {
       
     case "/rulesearch":
       var result = tools.searchFor(message.text, rules);
-      slashCommand.replyPublic(message, atts.searchFormat(message.text, result, version));
+      var resultList = result.split(" ");
+        if (resultList.length <= 5) {
+      slashCommand.replyPublic(message, inter.interactiveSearch(resultList, message.text));
+          return;
+        }
+        
+      else {
+        slashCommand.replyPublic(message, atts.searchFormat(message.text, result, version));
+        return;
+                          }
     break;
       
     case "/coinflip":
@@ -153,10 +164,14 @@ a specific vendor's site, please use the vendor before the query");
     case "/forums":
       var userInput = message.text.split(" ");
       userInput.splice(0, 0, "nothingtoseehere");
-      var url = "https://ftcforum.usfirst.org/search?q=";
+      
+      var baseURL = "https://ftcforum.usfirst.org/search?q=";
       var query = tools.assembleQuery(userInput, '+');
-      slashCommand.replyPublic(message, url + query);
-
+      var url = baseURL + query;
+      console.log(baseURL);
+      var request = require('request');
+        
+      slashCommand.replyPublic(message, url);
     break;
       
     case "/resourcelibrary":
@@ -185,6 +200,7 @@ a specific vendor's site, please use the vendor before the query");
 
     }
   } 
+  
 });
 };
 
